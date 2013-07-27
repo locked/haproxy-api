@@ -34,3 +34,9 @@ Display Statistics
 ```
 print h.stats()
 ```
+
+Or retrieve a specific server status:
+
+```
+print h.status("backend", "server")
+```
