@@ -26,3 +26,11 @@ Disable/Enable a server on a specific backend
 h.disable("backend", "server")
 h.enable("backend", "server")
 ```
+
+
+Display Statistics
+------------------
+
+```
+print h.stats()
+```
