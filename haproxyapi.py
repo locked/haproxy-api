@@ -6,11 +6,21 @@ class haproxy:
 		self.auth = auth
 
 	def enable(self, backend, server):
-		self.post(backend, server, "enable")
+		return self.post(backend, server, "enable")
 
 	def disable(self, backend, server):
-		self.post(backend, server, "disable")
+		return self.post(backend, server, "disable")
 
 	def post(self, backend, server, action):
 		payload = {'s':server, 'b':backend, 'action':action}
 		r = requests.post(self.url, auth=self.auth, data=payload)
+		if r.status_code<>200:
+			return "Error (%d)" % int(r.status_code)
+		return "OK"
+
+	def stats(self):
+		r = requests.get("%s;csv" % self.url, auth=self.auth)
+		if r.status_code<>200:
+			return "Error (%d)" % int(r.status_code)
+		lines = r.text.split("\n")
+		return lines[1:]
