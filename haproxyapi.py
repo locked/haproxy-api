@@ -22,5 +22,16 @@ class haproxy:
 		r = requests.get("%s;csv" % self.url, auth=self.auth)
 		if r.status_code<>200:
 			return "Error (%d)" % int(r.status_code)
-		lines = r.text.split("\n")
-		return lines[1:]
+		lines = r.text.split("\n")[:-1]
+		header = lines.pop(0).replace('# ','').strip(",").split(",")
+		rows = []
+		for l in lines:
+			rows.append(dict(zip(header, l.split(","))))
+		return rows
+
+	def status(self, backend, server):
+		stats = self.stats()
+		servers = {}
+		for s in stats:
+			servers[s['pxname']+':'+s['svname']] = s
+		return servers[backend+':'+server] if backend+':'+server in servers else "Not found"
