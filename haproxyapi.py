@@ -12,10 +12,12 @@ class haproxy:
 		return self.post(backend, server, "disable")
 
 	def post(self, backend, server, action):
-		payload = {'s':server, 'b':backend, 'action':action}
-		r = requests.post(self.url, auth=self.auth, data=payload)
-		if r.status_code<>200:
+		payload = 's=%s&action=%s&b=%s' % (server, action, backend)
+		r = requests.post(self.url, auth=self.auth, data=payload, allow_redirects=False)
+		if r.status_code<>303:
 			return "Error (%d)" % int(r.status_code)
+		if 'DONE' not in r.headers['location']:
+			return "Error (%s)" % r.headers['location']
 		return "OK"
 
 	def stats(self):
