@@ -7,7 +7,7 @@ Python HAProxy API Client
 Requirements
 ------------
 
-- requests (http://docs.python-requests.org/en/latest/)
+- requests >=0.12 (http://docs.python-requests.org/en/latest/)
 
 
 Class Initialization
